@@ -1,0 +1,14 @@
+pipeline:
+  docker:
+    when:
+      branch: [ master ]
+      event: push
+    image: alpine:3.2
+    commands:
+      - apk --update add docker
+      - "export DOCKER_HOST=unix:///var/run/host.sock"
+      - docker login -u ${DOCKER_LOGIN} -p ${DOCKER_PASSWORD} -e ${DOCKER_EMAIL}
+      - docker build -t frankmoney/github-and-asana:latest .
+      - docker push frankmoney/github-and-asana:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/host.sock:ro
