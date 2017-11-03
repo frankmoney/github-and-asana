@@ -1,0 +1,12 @@
+{
+    "plugins": [
+        "transform-class-properties",
+        "syntax-decorators",
+        "transform-decorators-legacy",
+        "transform-runtime"
+    ],
+    "presets":[
+        "node7",
+        "stage-0"
+    ]
+}

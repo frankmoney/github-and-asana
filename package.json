@@ -1,0 +1,59 @@
+{
+  "name": "frank.gitsana",
+  "version": "0.0.1",
+  "description": "Asana + GitHub = Love",
+  "scripts": {
+    "start": "node bin/entry",
+    "build": "node_modules/.bin/babel src/ -d dist/ --optional runtime",
+    "test": "mocha --timeout 5000 --compilers js:babel-register $(find test -type f -name '*.js' | sort)"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frankmoney/gitsana.git"
+  },
+  "keywords": [
+    "github",
+    "asana",
+    "integration",
+    "hook"
+  ],
+  "author": "Nick Delitski",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/frankmoney/gitsana/issues"
+  },
+  "homepage": "https://github.com/frankmoney/gitsana#readme",
+  "devDependencies": {
+    "babel-eslint": "^7.1.0",
+    "chai": "^4.1.2",
+    "chai-register": "0.0.1",
+    "eslint": "4.3.0",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-config-prettier": "^2.3.0",
+    "eslint-import-resolver-webpack": "^0.8.3",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "5.1.1",
+    "eslint-plugin-mocha": "^4.11.0",
+    "eslint-plugin-prettier": "^2.2.0",
+    "eslint-plugin-react": "^7.2.1",
+    "mocha": "3.5.3",
+    "prettier": "^1.5.3"
+  },
+  "dependencies": {
+    "asana": "^0.15.0",
+    "babel-core": "^6.7.2",
+    "babel-plugin-syntax-decorators": "^6.13.0",
+    "babel-plugin-transform-class-properties": "^6.6.0",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-node7": "^1.5.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "babel-register": "^6.26.0",
+    "babel-runtime": "^6.6.1",
+    "bluebird": "^3.0.6",
+    "deep-property": "^1.1.0",
+    "github": "12.0.1",
+    "lodash": "4.17.2",
+    "pg": "^7.3.0"
+  }
+}
