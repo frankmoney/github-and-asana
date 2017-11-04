@@ -5,7 +5,6 @@ Dumb integration between Asana and GitHub
 ```
 yarn install
 ```
-
 # Setup Environment
 See process.env.***** below
 ```js
