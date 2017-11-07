@@ -5,6 +5,7 @@ import { injectTaskTickerToken } from './helpers'
 import { getOrSetTaskTicker, getTaskTickers } from './db'
 import config from './config'
 
+const DELAY = 30000
 const run = async () => {
   const asana = new AsanaClient()
   await asana.setup(config.asana)
@@ -15,7 +16,10 @@ const run = async () => {
     const unmarkedTasks = tasks.filter(task => !tickerMapping[task.id])
     if (unmarkedTasks.length) {
       console.info(`found ${unmarkedTasks.length} unmarked tasks`)
+    } else {
+      console.info('no new tasks to mark')
     }
+
     all(unmarkedTasks).map(
       async ({ id, name }) => {
         const storedId = await getOrSetTaskTicker(id)
@@ -27,7 +31,8 @@ const run = async () => {
       { concurrency: 5 }
     )
 
-    await delay(30000)
+    console.info(`Waiting ${DELAY}ms...`)
+    await delay(DELAY)
   }
 }
 
