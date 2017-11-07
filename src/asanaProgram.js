@@ -5,7 +5,7 @@ import { injectTaskTickerToken } from './helpers'
 import { getOrSetTaskTicker, getTaskTickers } from './db'
 import config from './config'
 
-const DELAY = 30000
+const DELAY = 90000
 const run = async () => {
   const asana = new AsanaClient()
   await asana.setup(config.asana)
