@@ -45,9 +45,13 @@ class AsanaClient {
       offset = nextPage && nextPage.offset
     } while (offset)
 
-    return projects.filter(
+    const matchedProjects = projects.filter(
       ({ notes, completed }) => !completed && hasProjectToken(notes)
     )
+
+    console.log(`found ${matchedProjects.length}`, matchedProjects)
+
+    return matchedProjects
   })
 
   listTasks = withLogging(async () => {

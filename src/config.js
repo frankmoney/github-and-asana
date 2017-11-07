@@ -38,7 +38,7 @@ export default checkConfig({
   asana: {
     accessToken: process.env.ASANA_ACCESS_TOKEN,
     workspaceId: process.env.ASANA_WORKSPACE,
-    ignoredTags: ['design'],
+    ignoredTags: (process.env.ASANA_IGNORE_TAGS || '').split(','),
   },
   postgres: {
     host: process.env.PGHOST,
