@@ -1,5 +1,5 @@
 import Asana from 'asana'
-import { find } from 'lodash'
+import { find, some } from 'lodash'
 import { hasProjectToken } from './helpers'
 
 const withLogging = fn => async (...args) => {
@@ -10,6 +10,11 @@ const withLogging = fn => async (...args) => {
     throw err
   }
 }
+
+const hasNoSectionMembership = ({ name, memberships }) =>
+  // TODO memberships field is always empty array
+  // !some(memberships, ({ section }) => !!section)
+  name[name.length - 1] !== ':'
 
 class AsanaClient {
   async setup({ accessToken, workspaceId }) {
@@ -63,7 +68,7 @@ class AsanaClient {
       } while (offset)
     }
 
-    return tasks.filter(task => !task.completed)
+    return tasks.filter(task => !task.completed && hasNoSectionMembership(task))
   })
 
   updateTaskName = withLogging(async ({ id, name }) => {
