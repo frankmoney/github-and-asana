@@ -68,7 +68,6 @@ class AsanaClient {
           offset,
           opt_fields: 'id,name,completed',
         })
-        tasks = tasks.concat(data)
         for (const task of data) {
           if (!task.completed && hasNoSectionMembership(task)) {
             if (this.ignoredTags.length) {
