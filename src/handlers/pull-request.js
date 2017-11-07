@@ -1,8 +1,8 @@
 import { compact } from 'lodash'
 import { getTaskById, postComment, closeTask, addTag } from '../api'
-import { getTaskId } from '../db'
+import { getAsanaTaskIdByTicker } from '../db'
 import github from '../github'
-import { scanIdTokens } from '../helpers'
+import { scanTickerTokens } from '../helpers'
 
 const DEV_BRANCH = 'dev1'
 const TEST_BRANCH = 'test'
@@ -23,8 +23,8 @@ const scanPullForTaskIds = async ({
   })
 
   const commitTexts = commits.map(x => x.commit.message)
-  const ids = scanIdTokens(commitTexts.join() + title)
-  const taskIds = await Promise.all(ids.map(id => getTaskId(id)))
+  const ids = scanTickerTokens(commitTexts.join() + title)
+  const taskIds = await Promise.all(ids.map(id => getAsanaTaskIdByTicker(id)))
   console.log(`found ${taskIds} from PR ${pr.title}`)
   return compact(taskIds)
 }

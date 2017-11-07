@@ -1,21 +1,21 @@
 /* eslint-disable no-constant-condition,no-await-in-loop */
 import { delay, all } from 'bluebird'
 import { listTasks, updateTaskName } from './api'
-import { replaceOrSetId } from './helpers'
-import { getTaskNumber, getTaskMapping } from './db'
+import { injectTaskTickerToken } from './helpers'
+import { getOrSetTaskTicker, getTaskTickers } from './db'
 
 const run = async () => {
   while (true) {
     const tasks = await listTasks()
-    const mapping = await getTaskMapping()
-    const freeTasks = tasks.filter(task => !mapping[task.id])
+    const tickerMapping = await getTaskTickers()
+    const unmarkedTasks = tasks.filter(task => !tickerMapping[task.id])
 
-    all(freeTasks).map(
+    all(unmarkedTasks).map(
       async ({ id, name }) => {
-        const storedId = await getTaskNumber(id)
+        const storedId = await getOrSetTaskTicker(id)
         await updateTaskName({
           id,
-          name: replaceOrSetId(name, storedId),
+          name: injectTaskTickerToken(name, storedId),
         })
       },
       { concurrency: 5 }

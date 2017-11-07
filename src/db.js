@@ -5,7 +5,7 @@ import config from './config'
 const { postgres: pgConfig } = config
 const pool = new Pool(pgConfig)
 
-export const getTaskNumber = async taskId => {
+export const getOrSetTaskTicker = async taskId => {
   const client = await pool.connect()
 
   try {
@@ -33,7 +33,7 @@ export const getTaskNumber = async taskId => {
   }
 }
 
-export const getTaskId = async number => {
+export const getAsanaTaskIdByTicker = async number => {
   const client = await pool.connect()
   try {
     const {
@@ -50,7 +50,10 @@ export const getTaskId = async number => {
   }
 }
 
-export const getTaskMapping = async () => {
+/*
+  Returns map of task tickers {task_id: ticker}
+ */
+export const getTaskTickers = async () => {
   const client = await pool.connect()
 
   try {
