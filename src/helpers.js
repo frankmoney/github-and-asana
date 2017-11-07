@@ -13,3 +13,8 @@ export const scanTickerTokens = str => {
   const match = str.match(/#\d+/gi) || []
   return match.map(x => parseInt(x.slice(1), 10)).filter(num => !isNaN(num))
 }
+
+export const hasProjectToken = str => {
+  const match = str.match(/^#P/)
+  return !!match
+}

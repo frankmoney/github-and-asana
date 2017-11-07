@@ -1,2 +1,2 @@
 require('babel-core/register')
-require('../src/github-watcher')
+require('../src/githubProgram')
