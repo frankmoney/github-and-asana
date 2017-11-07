@@ -16,7 +16,6 @@ function checkConfig(conf) {
 
   required(
     'asana.accessToken',
-    'asana.projectId',
     'asana.workspaceId',
     'postgres.host',
     'postgres.database',
@@ -38,8 +37,8 @@ export default checkConfig({
   host: process.env.HOST, // optional
   asana: {
     accessToken: process.env.ASANA_ACCESS_TOKEN,
-    projectId: process.env.ASANA_PROJECT,
     workspaceId: process.env.ASANA_WORKSPACE,
+    ignoredTags: ['design'],
   },
   postgres: {
     host: process.env.PGHOST,

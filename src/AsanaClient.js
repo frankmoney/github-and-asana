@@ -1,5 +1,5 @@
 import Asana from 'asana'
-import { find, some } from 'lodash'
+import { find, some, intersection } from 'lodash'
 import { hasProjectToken } from './helpers'
 
 const withLogging = fn => async (...args) => {
@@ -17,8 +17,9 @@ const hasNoSectionMembership = ({ name, memberships }) =>
   name[name.length - 1] !== ':'
 
 class AsanaClient {
-  async setup({ accessToken, workspaceId }) {
+  async setup({ accessToken, workspaceId, ignoredTags = [] }) {
     this.workspaceId = workspaceId
+    this.ignoredTags = ignoredTags
     this.client = Asana.Client.create().useAccessToken(accessToken)
     this.user = await this.client.users.me()
     const { data: tags } = await this.client.tags.findAll({
@@ -64,11 +65,27 @@ class AsanaClient {
           opt_fields: 'id,name,completed',
         })
         tasks = tasks.concat(data)
+        for (const task of data) {
+          if (!task.completed && hasNoSectionMembership(task)) {
+            if (this.ignoredTags.length) {
+              // TODO batch request all tags
+              const tags = await this.getTaskTags(task.id)
+              if (
+                !intersection(this.ignoredTags, tags.map(({ name }) => name))
+                  .length
+              ) {
+                tasks.push(task)
+              }
+            } else {
+              tasks.push(task)
+            }
+          }
+        }
         offset = nextPage && nextPage.offset
       } while (offset)
     }
 
-    return tasks.filter(task => !task.completed && hasNoSectionMembership(task))
+    return tasks
   })
 
   updateTaskName = withLogging(async ({ id, name }) => {
@@ -81,6 +98,11 @@ class AsanaClient {
   getTaskById = withLogging(async id => {
     const resp = await this.client.tasks.findById(id)
     return resp
+  })
+
+  getTaskTags = withLogging(async id => {
+    const resp = await this.client.tasks.tags(id)
+    return resp.data
   })
 
   postComment = withLogging(async (taskId, comment) => {
