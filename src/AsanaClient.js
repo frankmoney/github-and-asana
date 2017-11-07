@@ -26,7 +26,6 @@ class AsanaClient {
       workspace: this.workspaceId,
     })
     this.tags = tags
-    this.projects = await this.listProjectsWithMarker()
   }
 
   listProjectsWithMarker = withLogging(async () => {
@@ -55,8 +54,9 @@ class AsanaClient {
   })
 
   listTasks = withLogging(async () => {
+    const projects = await this.listProjectsWithMarker()
     let tasks = []
-    for (const project of this.projects) {
+    for (const project of projects) {
       console.log(`listing tasks in ${project.name}`)
       let offset
       do {
