@@ -22,10 +22,7 @@ class AsanaClient {
     this.ignoredTags = ignoredTags
     this.client = Asana.Client.create().useAccessToken(accessToken)
     this.user = await this.client.users.me()
-    const { data: tags } = await this.client.tags.findAll({
-      workspace: this.workspaceId,
-    })
-    this.tags = tags
+    this.tags = await this.listAllTags()
   }
 
   listProjectsWithMarker = withLogging(async () => {
@@ -48,14 +45,14 @@ class AsanaClient {
       ({ notes, completed }) => !completed && hasProjectToken(notes)
     )
 
-    console.log(`found ${matchedProjects.length}`, matchedProjects)
+    console.log(`found ${matchedProjects.length} projects`, matchedProjects)
 
     return matchedProjects
   })
 
   listTasks = withLogging(async () => {
     const projects = await this.listProjectsWithMarker()
-    let tasks = []
+    const tasks = []
     for (const project of projects) {
       console.log(`listing tasks in ${project.name}`)
       let offset
@@ -89,6 +86,26 @@ class AsanaClient {
     }
 
     return tasks
+  })
+
+  listAllTags = withLogging(async () => {
+    let offset
+    let tags = []
+    do {
+      const {
+        data,
+        _response: { next_page: nextPage },
+      } = await this.client.tags.findAll({
+        workspace: this.workspaceId,
+        offset,
+      })
+      tags = tags.concat(data)
+      offset = nextPage && nextPage.offset
+    } while (offset)
+
+    console.log(`found ${tags.length} tags`, tags)
+
+    return tags
   })
 
   updateTaskName = withLogging(async ({ id, name }) => {
