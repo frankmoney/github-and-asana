@@ -51,7 +51,7 @@ export default class PullRequestHandler {
 
     if (action === 'opened') {
       // new pull request have been added
-      message = `<a href="${url}">PR#${number}</a> opened by ${actor}`
+      message = `PR#${number} opened by ${actor} ${url}`
       if (pr.base.ref === DEV_BRANCH) {
         await Promise.all(
           tasks.map(task => this.asana.addTag(task.id, 'review'))

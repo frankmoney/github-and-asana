@@ -127,7 +127,7 @@ class AsanaClient {
 
   postComment = withLogging(async (taskId, comment) => {
     const resp = await this.client.tasks.addComment(taskId, {
-      html_text: comment,
+      text: comment,
     })
     return resp.data
   })
