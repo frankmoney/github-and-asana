@@ -27,6 +27,7 @@ const run = async () => {
     if (handler) {
       console.info(`processing ${event} git event`)
       await handler.handle(data)
+      res.end('handled')
     } else {
       console.warn(`dont know how to handle ${event} event`)
       res.writeHead(400)
