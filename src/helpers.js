@@ -10,6 +10,11 @@ export const injectTaskTickerToken = (name, id) => {
 }
 
 export const scanTickerTokens = str => {
+  // TODO github special namings for pull requests which intercepts with our tokens. This is a hack we should find a better way
+  if (str.startsWith('Merge pull request')) {
+    return []
+  }
+
   const match = str.match(/#\d+/gi) || []
   return match.map(x => parseInt(x.slice(1), 10)).filter(num => !isNaN(num))
 }
