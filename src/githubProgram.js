@@ -3,7 +3,7 @@ import PullRequestHandler from './handlers/PullRequestHandler'
 import AsanaClient from './AsanaClient'
 import config from './config'
 
-const whenGitAgent = req => (req.headers['user-agent'] || '').match(/git/i)
+const whenNotGitAgent = req => !(req.headers['user-agent'] || '').match(/git/i)
 const whenGitEvent = req => !!req.headers['x-github-event']
 
 const run = async () => {
@@ -16,7 +16,7 @@ const run = async () => {
 
   const server = new HttpServer()
 
-  server.intercept(whenGitAgent, (req, res) => {
+  server.intercept(whenNotGitAgent, (req, res) => {
     res.writeHead(404)
     res.end()
   })

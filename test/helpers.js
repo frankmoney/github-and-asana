@@ -31,13 +31,6 @@ describe('helpers', () => {
     expect(newName).to.be.eq(expected)
   })
 
-  it('should ignore pull request message', () => {
-    const commitMessage = 'Merge pull request#221 from fasdfasfdaf'
-    const tokens = scanTickerTokens(commitMessage)
-
-    expect(tokens).to.have.length(0)
-  })
-
   it('should handle many tokens in a single message', () => {
     const commitMessage = 'fix #10 and #30 tasks'
     const tokens = scanTickerTokens(commitMessage)

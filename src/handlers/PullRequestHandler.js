@@ -26,7 +26,9 @@ export default class PullRequestHandler {
       head: pr.head.sha,
     })
 
-    const commitTexts = commits.map(x => x.commit.message)
+    const commitTexts = commits
+      .map(x => x.commit.message)
+      .filter(msg => msg.indexOf('Merge pull request') === -1)
     const ids = scanTickerTokens(commitTexts.join() + title)
     const taskIds = await Promise.all(ids.map(id => getAsanaTaskIdByTicker(id)))
     console.log(`found ${taskIds} from PR ${pr.title}`)

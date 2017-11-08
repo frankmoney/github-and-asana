@@ -49,10 +49,15 @@ export default class HttpServer {
       })
     })
 
+    let handled
     for (const [filterPredicate, handler] of this.interceptors) {
-      if (filterPredicate(req)) {
+      if (!handled && filterPredicate(req)) {
         await handler(req, res, data)
+        handled = true
       }
+    }
+    if (!handled) {
+      res.end(404)
     }
   }
 
