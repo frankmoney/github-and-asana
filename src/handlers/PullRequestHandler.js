@@ -1,4 +1,4 @@
-import { compact } from 'lodash'
+import { compact, uniq } from 'lodash'
 import { getAsanaTaskIdByTicker } from '../db'
 import github from '../github'
 import { scanTickerTokens } from '../helpers'
@@ -30,7 +30,7 @@ export default class PullRequestHandler {
     const ids = scanTickerTokens(commitTexts.join() + title)
     const taskIds = await Promise.all(ids.map(id => getAsanaTaskIdByTicker(id)))
     console.log(`found ${taskIds} from PR ${pr.title}`)
-    return compact(taskIds)
+    return uniq(compact(taskIds))
   }
 
   handle = async payload => {
