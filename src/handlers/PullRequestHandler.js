@@ -88,9 +88,9 @@ export default class PullRequestHandler {
 
     if (message) {
       console.log(message)
-      await Promise.all(
-        tasks.map(task => this.asana.postComment(task.id, message))
-      )
+      // await Promise.all(
+      //   tasks.map(task => this.asana.postComment(task.id, message))
+      // )
     } else {
       console.log('no message')
     }
