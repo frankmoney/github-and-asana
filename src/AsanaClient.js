@@ -11,6 +11,8 @@ const withLogging = fn => async (...args) => {
   }
 }
 
+const NEW_TASKS_DELAY_MS = 1000 * 60 * 5 // 10 min
+
 const hasNoSectionMembership = ({ name, memberships }) =>
   // TODO memberships field is always empty array
   // !some(memberships, ({ section }) => !!section)
@@ -53,6 +55,7 @@ class AsanaClient {
   listTasks = withLogging(async () => {
     const projects = await this.listProjectsWithMarker()
     const tasks = []
+    const now = new Date()
     for (const project of projects) {
       console.log(`listing tasks in ${project.name}`)
       let offset
@@ -63,10 +66,15 @@ class AsanaClient {
         } = await this.client.tasks.findAll({
           project: project.id,
           offset,
-          opt_fields: 'id,name,completed',
+          opt_fields: 'id,name,completed,created_at',
         })
         for (const task of data) {
-          if (!task.completed && hasNoSectionMembership(task)) {
+          if (
+            !task.completed &&
+            hasNoSectionMembership(task) &&
+            // we delay new tasks to avoid task title rewrite when someone typing
+            now - Date.parse(task.created_at) > NEW_TASKS_DELAY_MS
+          ) {
             if (this.ignoredTags.length) {
               // TODO batch request all tags
               const tags = await this.getTaskTags(task.id)
