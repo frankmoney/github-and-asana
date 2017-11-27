@@ -1,6 +1,6 @@
 {
   "name": "frank.gitsana",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Asana + GitHub = Love",
   "scripts": {
     "start": "node bin/entry",
