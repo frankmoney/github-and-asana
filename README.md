@@ -1,5 +1,7 @@
 # GitHub married Asana
-Dumb integration between Asana and GitHub
+This is an ad hoc built Asana/GitHub integration which keeps tickets in sync with relevant pull request statuses. 
+
+If it seems like a solution to your problem, please drop us an email to dev@frank.ly so we can advise you on the installation.
 
 # Install packages
 ```
