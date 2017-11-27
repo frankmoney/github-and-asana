@@ -6,6 +6,8 @@ import { getOrSetTaskTicker, getTaskTickers } from './db'
 import config from './config'
 
 const DELAY = 90000
+const TASK_TICKER_PLACEMENT = 'tag'
+
 const run = async () => {
   const asana = new AsanaClient()
   await asana.setup(config.asana)
@@ -23,10 +25,14 @@ const run = async () => {
     all(unmarkedTasks).map(
       async ({ id, name }) => {
         const storedId = await getOrSetTaskTicker(id)
-        await asana.updateTaskName({
-          id,
-          name: injectTaskTickerToken(name, storedId),
-        })
+        if (TASK_TICKER_PLACEMENT === 'tag') {
+          await asana.addTag(id, `${storedId}`)
+        } else if (TASK_TICKER_PLACEMENT === 'name') {
+          await asana.updateTaskName({
+            id,
+            name: injectTaskTickerToken(name, storedId),
+          })
+        }
       },
       { concurrency: 5 }
     )

@@ -146,8 +146,16 @@ class AsanaClient {
   })
 
   addTag = withLogging(async (taskId, tagName) => {
-    const { id: tagId } = find(this.tags, { name: tagName })
-    const resp = await this.client.tasks.addTag(taskId, { tag: tagId })
+    let tag = find(this.tags, { name: tagName })
+    if (!tag) {
+      console.log(`tag ${tagName} was not found, creating`)
+      tag = await this.client.tags.createInWorkspace(this.workspaceId, {
+        name: tagName,
+      })
+      console.log(`tag created ${tagName} id=${tag.id}`)
+      this.tags.push(tag)
+    }
+    const resp = await this.client.tasks.addTag(taskId, { tag: tag.id })
     return resp.data
   })
 }
