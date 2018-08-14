@@ -15,6 +15,6 @@ export const scanTickerTokens = str => {
 }
 
 export const hasProjectToken = str => {
-  const match = str.match(/^#P/)
+  const match = str.match(/^#PYOS/)
   return !!match
 }
