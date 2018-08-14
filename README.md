@@ -1,7 +1,10 @@
-# GitHub married Asana
+# GitHub/Asana integration
 This is an ad hoc built Asana/GitHub integration which keeps tickets in sync with relevant pull request statuses. 
 
-If it seems like a solution to your problem, please drop us an email to dev@frank.ly so we can advise you on the installation.
+Thank you for your interest in this! 
+Currently the integration is not in any way a product, just our internal tool which we felt might be used by someone else. Please feel free to deploy it and tinker with it! 
+
+Unfortunately we don't have any spare time at the moment even to document the tool properly; we can commit to answering specific questions, but not much besides that, sorry! 
 
 # Install packages
 ```
