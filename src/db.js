@@ -5,9 +5,6 @@ import config from './config'
 const { postgres: pgConfig } = config
 const pool = new Pool(pgConfig)
 
-// TODO set base increment to all task tickers in asana
-const TICKER_SHIFT = 1400
-
 export const getOrSetTaskTicker = async taskId => {
   const client = await pool.connect()
 
@@ -20,7 +17,7 @@ export const getOrSetTaskTicker = async taskId => {
     )
 
     if (rows.length) {
-      return rows[0].id + TICKER_SHIFT
+      return rows[0].id
     }
 
     const {
@@ -30,7 +27,7 @@ export const getOrSetTaskTicker = async taskId => {
       [taskId]
     )
 
-    return id + TICKER_SHIFT
+    return id
   } finally {
     client.release()
   }
